@@ -1,0 +1,36 @@
+resources:
+- name: docker-ce-release
+  type: github-release
+  source:
+    owner: docker
+    repository: docker-ce
+    access_token: ((github.access-token))
+- name: pack-release
+  type: github-release
+  source:
+    owner: buildpack
+    repository: pack
+    access_token: ((github.access-token))
+- name: src
+  type: git
+  source:
+    uri: ((concourse-pack.git.uri))
+    private_key: ((concourse-pack.git.private-key))
+    branch: master
+- name: pack-docker-image
+  source:
+    repository: daniellavoie/pack-docker-image
+
+jobs:
+- name: Build Pack Docker Image
+  plan:
+  - get: pack-release
+    trigger: true
+  - get: docker-ce-release
+  - get: src
+  - task: 
+  - put: docker-image-jw-dialog-manager
+    params:
+      build: src/docker
+      tag_file: pack-release/version
+      build_args_file: docker-build-args/docker-build-args.json
