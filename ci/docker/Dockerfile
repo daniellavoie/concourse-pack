@@ -1,5 +1,7 @@
 FROM ubuntu
 
+ARG PACK_VERSION
+
 RUN apt-get update
 
 RUN apt-get -y install \
@@ -20,7 +22,11 @@ RUN apt-get -y update
 
 RUN apt-get -y install docker-ce docker-ce-cli containerd.io wget
 
-RUN wget https://github.com/buildpack/pack/releases/download/v0.2.0/pack-${PACK_VERSION}-linux.tgz && \
-  tar xvf pack-${PACK_VERSION}-linux.tgz && \
+RUN service docker start
+
+RUN wget https://github.com/buildpack/pack/releases/download/v0.2.0/pack-v${PACK_VERSION}-linux.tgz && \
+  tar xvf pack-v${PACK_VERSION}-linux.tgz && \
   mv pack /usr/local/bin/pack && \
   pack --help
+
+ENTRYPOINT ["service", "docker", "start"]

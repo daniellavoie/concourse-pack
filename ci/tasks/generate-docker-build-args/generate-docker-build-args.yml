@@ -4,14 +4,14 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: alpine
+    repository: ubuntu
 
 inputs:
 - name: pack-release
-- name: ci-src
+- name: src
 
 outputs:
 - name: docker-build-args
 
 run:
-  path: ci-src/ci/tasks/generate-docker-build-args/generate-docker-build-args.sh
+  path: src/ci/tasks/generate-docker-build-args/generate-docker-build-args.sh
